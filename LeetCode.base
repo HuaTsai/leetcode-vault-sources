@@ -1,0 +1,22 @@
+views:
+  - type: table
+    name: Table
+    filters:
+      and:
+        - file.basename.contains("-")
+    order:
+      - file.name
+      - difficulty
+      - tags
+      - solved-1st
+      - memo
+    sort:
+      - property: file.name
+        direction: ASC
+      - property: difficulty
+        direction: DESC
+    columnSize:
+      file.name: 216
+      note.difficulty: 113
+      note.tags: 446
+      note.solved-1st: 140

@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""
+LeetCode Problem Note Generator
+Usage: ./newproblem --id 1 --title "Problem Title" --tags tag1 tag2 tag3
+"""
+
+import tomllib
+import argparse
+import re
+from pathlib import Path
+from dataclasses import dataclass
+
+
+@dataclass
+class Problem:
+    id: int
+    title: str
+    difficulty: str
+    tags: list[str]
+
+
+PROBLEMS_DIR = Path(__file__).parent / "Problems"
+PROBLEMSETS_FILE = Path(__file__).parent / "problemsets.toml"
+NOTE_TEMPLATE = """---
+leetcode-id: {problem_id}
+difficulty: {difficulty}
+tags:
+{tags_yaml}
+memo:
+dg-publish: true
+---
+
+## Problem Description
+
+
+
+## Solution
+
+```cpp
+// Time: O()
+// Space: O()
+```
+
+## Related Problems
+
+"""
+
+
+# Maps a problemsets.toml section to the base tags it implies.
+SOURCE_TAGS = {
+    "common": ["grind-169", "neetcode-150"],
+    "grind_169_exclusive": ["grind-169"],
+    "neetcode_150_exclusive": ["neetcode-150"],
+}
+
+
+def lookup_problem(title: str) -> tuple[str, list[str]] | None:
+    """Find a title in problemsets.toml, returning (difficulty, base_tags)."""
+    with open(PROBLEMSETS_FILE, "rb") as f:
+        data = tomllib.load(f)
+
+    for section, base_tags in SOURCE_TAGS.items():
+        for difficulty, titles in data.get(section, {}).items():
+            if title in titles:
+                return difficulty, base_tags
+    return None
+
+
+def sanitize_filename(problem_id, title) -> str:
+    sanitized = re.sub(r"[^\w\s-]", "", title)
+    sanitized = re.sub(r"[\s]+", "-", sanitized)
+    sanitized = re.sub(r"-+", "-", sanitized)
+    sanitized = sanitized.strip("-")
+    return f"{int(problem_id):04d}-{sanitized}.md"
+
+
+def create_problem_note(problem: Problem):
+    # Prepare metatdata
+    filepath = PROBLEMS_DIR / sanitize_filename(problem.id, problem.title)
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    if filepath.exists():
+        print(f"⚠️  File already exists: {filepath}")
+        response = input("Overwrite? (y/N): ")
+        if response.lower() != "y":
+            print("❌ Cancelled")
+            return
+    tags_yaml = "\n".join([f"  - {tag}" for tag in problem.tags])
+
+    # Write to file
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(
+            NOTE_TEMPLATE.format(
+                problem_id=problem.id,
+                difficulty=problem.difficulty,
+                tags_yaml=tags_yaml,
+            )
+        )
+
+    # Output message
+    print(f"✅ Created: {filepath}")
+    print(f"📝 Difficulty: {problem.difficulty}")
+    print(f"🏷️  Tags: {', '.join(problem.tags)}")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Create a new LeetCode problem note",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  ./newproblem --id 1 --title "Two Sum" --tags array hash-table
+  ./newproblem --id 20 --title "Valid Parentheses" --tags stack string
+  ./newproblem --id 102 --title "Binary Tree Level Order Traversal" --tags tree bfs
+        """,
+    )
+
+    parser.add_argument("--id", type=int, required=True, help="LeetCode problem ID")
+    parser.add_argument("--title", required=True, help="Problem title")
+    parser.add_argument(
+        "--tags",
+        required=True,
+        nargs="+",
+        help="Space-separated tags (e.g., array hash-table dp)",
+    )
+
+    args = parser.parse_args()
+
+    result = lookup_problem(args.title)
+    if result is None:
+        print(f"⚠️  Problem not found in problemsets.toml: {args.title}")
+        print("Please check the title or add it to problemsets.toml")
+        return
+
+    difficulty, base_tags = result
+    problem = Problem(
+        id=args.id,
+        title=args.title,
+        difficulty=difficulty,
+        tags=args.tags + base_tags,
+    )
+
+    create_problem_note(problem)
+
+
+if __name__ == "__main__":
+    main()
