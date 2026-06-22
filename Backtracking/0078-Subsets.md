@@ -6,9 +6,6 @@ tags:
   - bit-manipulation
   - grind-169
   - neetcode-150
-solved-1st: 2025-12-15
-solved-2nd:
-solved-3rd:
 memo: 主要有迭代法、回溯法跟位元遮罩法，注意複雜度計算
 dg-publish: true
 ---

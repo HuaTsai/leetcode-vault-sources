@@ -5,9 +5,6 @@ tags:
   - bit-manipulation
   - grind-169
   - neetcode-150
-solved-1st: 2025-12-18
-solved-2nd:
-solved-3rd:
 memo: 基礎位元操作應用
 dg-publish: true
 ---

@@ -5,9 +5,6 @@ tags:
   - hash
   - grind-169
   - neetcode-150
-solved-1st: 2025-12-20
-solved-2nd:
-solved-3rd:
 memo: 字串編碼策略
 dg-publish: true
 ---

@@ -5,9 +5,6 @@ tags:
   - monotonic-queue
   - grind-169
   - neetcode-150
-solved-1st: 2025-12-16
-solved-2nd:
-solved-3rd:
 memo: 使用單調佇列，熟悉算法實作
 dg-publish: true
 ---

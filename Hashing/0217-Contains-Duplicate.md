@@ -5,9 +5,6 @@ tags:
   - hash
   - grind-169
   - neetcode-150
-solved-1st: 2025-12-09
-solved-2nd:
-solved-3rd:
 memo: 基礎雜湊表應用
 dg-publish: true
 ---

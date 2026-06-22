@@ -5,9 +5,6 @@ tags:
   - dynamic-programming
   - grind-169
   - neetcode-150
-solved-1st: 2025-12-12
-solved-2nd:
-solved-3rd:
 memo: 中間字元左右擴張、預處理技巧、Manacher 演算法
 dg-publish: true
 ---

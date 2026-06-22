@@ -6,9 +6,6 @@ tags:
   - policy-based-data-structures
   - heap
   - neetcode-150
-solved-1st: 2025-12-16
-solved-2nd:
-solved-3rd:
 memo: 基礎最小堆應用
 dg-publish: true
 ---

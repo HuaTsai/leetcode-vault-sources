@@ -5,9 +5,6 @@ tags:
   - hash
   - heap
   - neetcode-150
-solved-1st: 2025-12-10
-solved-2nd:
-solved-3rd:
 memo: hash + min-heap 應用
 dg-publish: true
 ---

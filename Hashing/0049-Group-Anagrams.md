@@ -5,9 +5,6 @@ tags:
   - hash
   - grind-169
   - neetcode-150
-solved-1st: 2025-12-10
-solved-2nd:
-solved-3rd:
 memo: 1. 排序的字串當作鍵值 2. 可設計逗號區隔的特殊鍵值
 dg-publish: true
 ---

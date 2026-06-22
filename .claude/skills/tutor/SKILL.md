@@ -29,7 +29,7 @@ This vault has an **essential difference** from a concept-knowledge vault:
    `Progress/` (gitignored)**, NOT in note frontmatter.
    - **NEVER write `solved-*`, `box`, `next-due`, etc. into a problem note's frontmatter.**
    - Note frontmatter keeps only intrinsic fields: `leetcode-id`, `difficulty`, `tags`, `memo`,
-     `dg-publish` (and optionally a write-once `first-solved`).
+     `dg-publish`. **No solve date is ever stored in a note** — all dates live in `Progress/`.
 
 ## File structure
 
@@ -83,8 +83,8 @@ in `{LANG}`. (Numbers, dates, badges, code stay universal.)
    - Create `Progress/` and a `<Pattern>.md` per pattern folder (see Templates).
    - **Migrate** existing notes: for each problem note, read its frontmatter; if it still has
      `solved-1st/2nd/3rd`, convert to an SR row (see Migration), then **strip those three fields
-     from the note's frontmatter** (leave `leetcode-id`, `difficulty`, `tags`, `memo`,
-     `dg-publish`; optionally set `first-solved` = the old `solved-1st`).
+     from the note's frontmatter** (leave only `leetcode-id`, `difficulty`, `tags`, `memo`,
+     `dg-publish` — no solve date is kept in the note).
    - Recompute `Dashboard.md`.
    - Confirm `Progress/` is gitignored; if not, tell the user to add `Progress/` to `.gitignore`.
 4. **Subsequent runs** → also reconcile: any problem note not yet in a pattern file gets added as
@@ -196,8 +196,8 @@ For each note still carrying `solved-1st/2nd/3rd`:
 - `last-reviewed` = the latest filled `solved-*` date.
 - `next-due` = `last-reviewed + interval(box)` (often already past → surfaces as due, which is
   correct — old problems should resurface).
-- Then **remove `solved-1st/2nd/3rd` from the note frontmatter**; optionally keep
-  `first-solved: <old solved-1st>` (written once, never updated).
+- Then **remove `solved-1st/2nd/3rd` from the note frontmatter** — no solve date is ever kept in a
+  note; the migrated `last-reviewed` in `Progress/` is the only record.
 
 ## Important reminders
 

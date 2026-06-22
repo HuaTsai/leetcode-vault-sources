@@ -5,9 +5,6 @@ tags:
   - hash
   - grind-169
   - neetcode-150
-solved-1st: 2025-12-09
-solved-2nd:
-solved-3rd:
 memo: 先檢查長度（重要），後扣計數檢查是否中途出現負數
 dg-publish: true
 ---
