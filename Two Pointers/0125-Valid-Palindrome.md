@@ -5,7 +5,7 @@ tags:
   - two-pointers
   - grind-169
   - neetcode-150
-memo: 雙指針基礎應用，可使用 while + if-else 解
+memo: 左右雙指針相向：用 if-else 鏈先單側跳過非英數字元，再 tolower 比較兩側，不等即 false，O(1) 空間
 dg-publish: true
 ---
 
@@ -13,7 +13,7 @@ dg-publish: true
 
 A phrase is a **palindrome** if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
 
-Given a string `s`, return `true` _if it is a **palindrome**, or_ `false` _otherwise_.
+Given a string `s`, return `true` *if it is a **palindrome**, or* `false` *otherwise*.
 
 ## Solution
 

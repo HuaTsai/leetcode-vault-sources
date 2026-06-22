@@ -6,7 +6,7 @@ tags:
   - policy-based-data-structures
   - heap
   - neetcode-150
-memo: 基礎最小堆應用
+memo: 維護大小為 k 的 min-heap，超過就 pop 最小，堆頂即第 k 大；priority_queue 預設 max-heap，須傳 greater<> 改成 min-heap
 dg-publish: true
 ---
 

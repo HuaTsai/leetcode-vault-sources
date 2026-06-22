@@ -5,7 +5,7 @@ tags:
   - hash
   - grind-169
   - neetcode-150
-memo: 基礎雜湊表應用
+memo: 一趟掃描，hash map 存「值→索引」；先查 target-nums[i] 是否已存在再把自己存入，確保不重用同一元素
 dg-publish: true
 ---
 

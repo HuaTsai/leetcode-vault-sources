@@ -6,13 +6,13 @@ tags:
   - bit-manipulation
   - grind-169
   - neetcode-150
-memo: 主要有迭代法、回溯法跟位元遮罩法，注意複雜度計算
+memo: 迭代法從空集合出發，每遇一數就複製現有全部子集再附加該數；另可回溯（每位選/不選）或位元遮罩（mask 0~2^n-1 逐位取），皆 O(n·2^n)
 dg-publish: true
 ---
 
 ## Problem Description
 
-Given an integer array `nums` of **unique** elements, return _all possible_ _subsets_ _(the power set)_.
+Given an integer array `nums` of **unique** elements, return *all possible* *subsets* *(the power set)*.
 
 The solution set **must not** contain duplicate subsets. Return the solution in **any order**.
 

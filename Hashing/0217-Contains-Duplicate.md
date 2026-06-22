@@ -5,7 +5,7 @@ tags:
   - hash
   - grind-169
   - neetcode-150
-memo: 基礎雜湊表應用
+memo: 邊掃描邊用 unordered_set：先查再插，命中已存在元素即回 true，一趟 O(n)
 dg-publish: true
 ---
 

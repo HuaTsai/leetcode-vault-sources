@@ -5,7 +5,7 @@ tags:
   - hash
   - grind-169
   - neetcode-150
-memo: 字串編碼策略
+memo: 實作用固定 3 位長度前綴（setw(3) 補零，長度≤999），decode 讀 3 位長度再切；通用法可改「長度#字串」的 length-prefix 避免分隔符誤判
 dg-publish: true
 ---
 

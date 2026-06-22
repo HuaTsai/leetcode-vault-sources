@@ -5,7 +5,7 @@ tags:
   - monotonic-queue
   - grind-169
   - neetcode-150
-memo: 使用單調佇列，熟悉算法實作
+memo: 單調遞減 deque 存（值，索引）：入隊前彈掉隊尾所有 ≤ 新值者，隊首索引出窗就 pop_front，隊首恆為窗口最大值，O(n)
 dg-publish: true
 ---
 
@@ -13,7 +13,7 @@ dg-publish: true
 
 You are given an array of integers `nums`, there is a sliding window of size `k` which is moving from the very left of the array to the very right. You can only see the `k` numbers in the window. Each time the sliding window moves right by one position.
 
-Return _the max sliding window_.
+Return *the max sliding window*.
 
 ## Solution
 

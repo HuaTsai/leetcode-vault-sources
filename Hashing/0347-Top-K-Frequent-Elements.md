@@ -5,7 +5,7 @@ tags:
   - hash
   - heap
   - neetcode-150
-memo: hash + min-heap 應用
+memo: hash 統計頻率後，用大小為 k 的 min-heap 取 top-k 達 O(nlogk)；進階用桶排序（頻率當索引、從高頻桶往回收集）達 O(n)
 dg-publish: true
 ---
 
@@ -40,7 +40,7 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
 }
 ```
 
-**可以將 `sort` 修改成 C++17 後的 `partial_sort` 達到  O(nlog(k))**
+**可以將 `sort` 修改成 C++17 後的 `partial_sort` 達到 O(nlog(k))**
 
 第二種做法，使用 min heap 或 red-black tree 將求 top k 的時間複雜度拉低
 

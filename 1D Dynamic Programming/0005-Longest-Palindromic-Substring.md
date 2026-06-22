@@ -5,13 +5,13 @@ tags:
   - dynamic-programming
   - grind-169
   - neetcode-150
-memo: 中間字元左右擴張、預處理技巧、Manacher 演算法
+memo: Manacher 線性解：插入「#」統一奇偶長度，維護回文邊界 l/r，用對稱位置複用 lps 省去重複擴張，O(n)
 dg-publish: true
 ---
 
 ## Problem Description
 
-Given a string `s`, return _the longest_ _palindromic_ _substring_ in `s`.
+Given a string `s`, return *the longest* *palindromic* *substring* in `s`.
 
 ## Solution
 

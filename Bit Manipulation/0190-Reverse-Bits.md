@@ -5,7 +5,7 @@ tags:
   - bit-manipulation
   - grind-169
   - neetcode-150
-memo: 基礎位元題目
+memo: 迴圈 32 次：ans 左移一位後 OR 上 n 的最低位 (n&1)，n 右移；逐位把低位搬到高位完成反轉
 dg-publish: true
 ---
 
