@@ -19,7 +19,7 @@ class Problem:
     tags: list[str]
 
 
-PROBLEMS_DIR = Path(__file__).parent / "Problems"
+PROBLEMS_DIR = Path(__file__).parent
 PROBLEMSETS_FILE = Path(__file__).parent / "problemsets.toml"
 NOTE_TEMPLATE = """---
 leetcode-id: {problem_id}
