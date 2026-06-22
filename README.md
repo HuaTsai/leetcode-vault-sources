@@ -1,9 +1,8 @@
 ---
+title: LeetCode Vault
 dg-home: true
 dg-publish: true
 ---
-
-# LeetCode Vault
 
 個人 LeetCode 解題筆記庫，用 Obsidian 管理、透過 Digital Garden 發佈。每題一篇筆記，收錄題目、C++ 解法（多種作法 + 複雜度）與關聯題目，並以間隔複習持續鞏固。
 
