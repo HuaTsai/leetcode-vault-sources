@@ -8,7 +8,7 @@ dg-publish: true
 
 ## 瀏覽方式
 
-- **依模式分類**：筆記放在對應的演算法資料夾——Array、Hashing、Heap、Backtracking、Bit Manipulation、Sliding Window、Two Pointers、1D Dynamic Programming …
+- **依模式分類**：筆記放在對應的演算法資料夾，資料夾以 NeetCode 150 roadmap 的學習順序加上數字前綴——`01-Arrays-and-Hashing`、`02-Two-Pointers`、`05-Sliding-Window`、`09-Heap`、`10-Backtracking`、`12-1D-Dynamic-Programming`、`17-Bit-Manipulation` …，檔案總管即照學習路徑排序。
 - **互動式索引**：用 Obsidian 開啟 `LeetCode.base`，可依題號 / 難度 / 標籤 / memo 排序、篩選整份題庫。
 
 ## 標籤
