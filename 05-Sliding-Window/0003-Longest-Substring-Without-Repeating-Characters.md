@@ -162,6 +162,6 @@ class Solution {
 
 [[0424-Longest-Repeating-Character-Replacement]] — 同一個骨架，收縮條件換成「窗口長度 − 最多字元出現次數 > k」
 [[0076-Minimum-Window-Substring]] — 同骨架但求**最小**，所以是窗口合法時才收縮，收縮時機剛好相反
-[[0567-Permutation-in-String]] — 窗口長度固定，退化成不需要 `while` 的定長滑動
+[[0567-Permutation-In-String]] — 窗口長度固定，退化成不需要 `while` 的定長滑動
 [[0121-Best-Time-to-Buy-and-Sell-Stock]] — 同資料夾的對照組，那題的左界是「直接跳」而非逐格縮
 [[STL-Pitfalls]] — 本題踩到的 `vector<bool>` 位元打包與 `char` 有號性都收在該篇第五類，另附 sanitizer 旗標組合
