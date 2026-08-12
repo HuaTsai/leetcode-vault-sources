@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 LeetCode Problem Note Generator
-Usage: ./newproblem --id 1 --title "Problem Title" --tags tag1 tag2 tag3
+Usage: ./newproblem --id 1 --title "Problem Title" --tags tag1 tag2 tag3 [--dir FOLDER]
 """
 
 import tomllib
@@ -74,9 +74,10 @@ def sanitize_filename(problem_id, title) -> str:
     return f"{int(problem_id):04d}-{sanitized}.md"
 
 
-def create_problem_note(problem: Problem):
+def create_problem_note(problem: Problem, output_dir: Path | None = None):
     # Prepare metatdata
-    filepath = PROBLEMS_DIR / sanitize_filename(problem.id, problem.title)
+    base_dir = output_dir if output_dir is not None else PROBLEMS_DIR
+    filepath = base_dir / sanitize_filename(problem.id, problem.title)
     filepath.parent.mkdir(parents=True, exist_ok=True)
     if filepath.exists():
         print(f"⚠️  File already exists: {filepath}")
@@ -110,7 +111,7 @@ def main():
 Examples:
   ./newproblem --id 1 --title "Two Sum" --tags array hash-table
   ./newproblem --id 20 --title "Valid Parentheses" --tags stack string
-  ./newproblem --id 102 --title "Binary Tree Level Order Traversal" --tags tree bfs
+  ./newproblem --id 704 --title "Binary Search" --tags binary-search --dir 04-Binary-Search
         """,
     )
 
@@ -121,6 +122,14 @@ Examples:
         required=True,
         nargs="+",
         help="Space-separated tags (e.g., array hash-table dp)",
+    )
+    parser.add_argument(
+        "--dir",
+        "-d",
+        type=Path,
+        default=None,
+        help="Folder to place the note in (default: repo root). "
+        "Relative paths resolve against the repo root, e.g. --dir 04-Binary-Search.",
     )
 
     args = parser.parse_args()
@@ -139,7 +148,11 @@ Examples:
         tags=args.tags + base_tags,
     )
 
-    create_problem_note(problem)
+    output_dir = None
+    if args.dir is not None:
+        output_dir = args.dir if args.dir.is_absolute() else PROBLEMS_DIR / args.dir
+
+    create_problem_note(problem, output_dir)
 
 
 if __name__ == "__main__":
