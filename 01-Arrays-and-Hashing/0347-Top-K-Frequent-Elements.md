@@ -11,13 +11,15 @@ dg-publish: true
 
 ## Problem Description
 
-Given an integer array `nums` and an integer `k`, return *the* `k` *most frequent elements*. You may return the answer in **any order**.
+Given an integer array `nums` and an integer `k`, return _the_ `k` _most frequent elements_. You may return the answer in **any order**.
 
 ## Solution
 
-以下做法一到三共同部份是要先計算出項目出現頻率
+核心觀念：先用 hash map 統計每個數字的出現頻率，再從頻率中取出前 `k` 大。取 top-k 的手段很多，取捨在時間複雜度與常數：全排序 O(n log n)、堆／有序集合 O(n log k)、桶排序 O(n)。**以下所有方法第一步都是統計頻率**，差別只在「怎麼取出前 k 大」。
 
-初步撰寫，將項目與頻率存入 vector 後做排序
+### 方法一：排序法 — O(n log n)／O(n)
+
+把 (數字, 頻率) 存進 vector，依頻率由大到小排序後取前 `k` 個。最直觀，但帶了完整排序的 log n。
 
 ```cpp
 // Time: O(nlog(n))
@@ -40,9 +42,12 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
 }
 ```
 
-**可以將 `sort` 修改成 C++17 後的 `partial_sort` 達到 O(nlog(k))**
+> [!tip]
+> 只要前 `k` 個，不必全排：把 `ranges::sort` 換成 `partial_sort`（只排出前 k 個）即可降到 O(n log k)。
 
-第二種做法，使用 min heap 或 red-black tree 將求 top k 的時間複雜度拉低
+### 方法二：Min-Heap（最佳實務）— O(n log k)／O(n)
+
+維護大小為 `k` 的最小堆，堆頂永遠是目前第 `k` 大的頻率；每來一個就 push，超過 `k` 就 pop 掉最小的，最後留下的就是 top-k。實務上這是最推薦的做法。
 
 ```cpp
 // Time: O(nlog(k))
@@ -68,11 +73,12 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
 }
 ```
 
-**注意 C++ 沒有辦法用 iterator 遍歷 priority queue**
+> [!note]
+> C++ 的 `priority_queue` 無法用 iterator 遍歷，只能反覆 `top()` / `pop()` 把元素取出。
 
-單純的 `set` 做法，時間複雜度與 heap 相同，但維持紅黑樹的成本比 heap 還高，所以不推薦，統一用 heap 會比較快
+### 方法三：有序 Set — O(n log k)／O(n)
 
-值得注意的是沒有開優化時反而 `set` 比較快
+用 `set<pair<freq, num>>` 自動維持有序、保持大小為 `k`，超過就刪掉最小的。複雜度與 heap 相同，但紅黑樹常數較大，一般不如 heap 快——有趣的是**沒開優化時 `set` 反而較快**。
 
 ```cpp
 // Time: O(nlog(k))
@@ -97,7 +103,9 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
 }
 ```
 
-第三種做法使用桶排序，桶子編號是出現頻率，內容是數字，會快很多
+### 方法四：桶排序（理論最優）— O(n)／O(n)
+
+桶的索引 = 出現頻率，桶的內容 = 該頻率的數字。從最高頻率的桶往回收集，湊滿 `k` 個即回傳，完全避開排序／堆的 log。
 
 ```cpp
 // Time: O(n)
@@ -124,11 +132,12 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
 }
 ```
 
-關鍵點是桶子數量上限可以開輸入**數字數量 + 1**，因為最極端就是全部都是相同的數字，加一是包含 0 方便計算
+> [!important]
+> 桶數量上限開「數字總數 **+ 1**」：最極端是全部都是同一個數字（頻率 = n），加一是為了讓索引含 0、計算方便。又因同一頻率可能對應多個數字，桶要用 `vector<vector<int>>` 而非 `vector<int>`。
 
-另外注意可能有重複情況，所以要開 `vector<vector<int>>` 而不是 `vector<int>`
+### 方法五：PBDS priority_queue（可改值，邊掃邊維護 k）— O(n log k)／O(n)
 
-第四種做法，使用 PBDS 裡的 priority queue，支援修改值，因為頻繁修改此處表現會最差
+用 `__gnu_pbds` 的 pairing heap，支援 `modify` 就地更新某數字的頻率。因為頻繁 modify，這裡反而表現最差，屬「能做但不划算」的示範。
 
 ```cpp
 // Time: O(nlog(k))
@@ -164,6 +173,10 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
   return result;
 }
 ```
+
+### 方法六：PBDS priority_queue（全入再取 k）— O(n log n)／O(n)
+
+所有元素先入最大堆、邊掃邊 `modify` 累加頻率，最後連續取 `k` 次堆頂。
 
 ```cpp
 // Time: O(nlog(n))
@@ -203,4 +216,6 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
 
 ## Related Problems
 
-[[3224-Sliding-Window-Mode]]
+- [[3224-Sliding-Window-Mode]] — 滑動視窗內動態維護眾數，延伸「頻率統計 + 取最高頻」。
+- [[0692-Top-K-Frequent-Words]] — 幾乎相同，改成字串且同頻要字典序，heap 比較器需自訂。
+- [[0451-Sort-Characters-By-Frequency]] — 依頻率重排字元，桶排序同款套路。
