@@ -26,30 +26,35 @@ This vault has an **essential difference** from a concept-knowledge vault:
 2. **State lives OUTSIDE note frontmatter.** Problem notes (`<Pattern>/NNNN-*.md`) are durable,
    published artifacts (`dg-publish: true`). Review state changes every session, so keeping it in
    frontmatter would churn publishable files on every review. Therefore **ALL SR state lives in
-   `Progress/` (gitignored)**, NOT in note frontmatter.
+   `00-Progress/`**, NOT in note frontmatter. `00-Progress/` IS version-controlled — it simply carries no
+   `dg-publish`, so it stays out of the published garden while still being committed.
    - **NEVER write `solved-*`, `box`, `next-due`, etc. into a problem note's frontmatter.**
    - Note frontmatter keeps only intrinsic fields: `leetcode-id`, `difficulty`, `tags`, `memo`,
-     `dg-publish`. **No solve date is ever stored in a note** — all dates live in `Progress/`.
+     `dg-publish`. **No solve date is ever stored in a note** — all dates live in `00-Progress/`.
 
 ## File structure
 
 ```
 <cwd>/                          ← the vault root
-├── <Pattern>/NNNN-Title.md     ← problem notes (Hashing/, Heap/, Sliding Window/, ...)
+├── 00-Progress/                ← SR state — COMMITTED, but never `dg-publish`ed
+│   ├── Dashboard.md            ← derived aggregate: due-today + per-pattern proficiency + stats
+│   ├── Question-Log.md         ← append-only verbatim record of every question ever asked
+│   └── <Pattern>.md            ← per-problem SR rows for that pattern (source of truth)
+├── <Pattern>/NNNN-Title.md     ← problem notes (01-Arrays-and-Hashing/, 06-Linked-List/, ...)
+├── 99-Toolbox/                 ← cross-cutting reference notes (STL pitfalls, templates)
 ├── problemsets.toml            ← curriculum (Grind 169 / NeetCode 150)
-├── newproblem                  ← note generator script
-└── Progress/                   ← SR state — GITIGNORED, never committed
-    ├── Dashboard.md            ← derived aggregate: due-today + per-pattern proficiency + stats
-    ├── Question-Log.md         ← append-only verbatim record of every question ever asked
-    └── <Pattern>.md            ← per-problem SR rows for that pattern (source of truth)
+└── newproblem                  ← note generator script
+
+00- and 99- are reserved for non-roadmap folders and are NOT patterns.
 ```
 
-- **Patterns** = the top-level folders (`Hashing`, `Heap`, `Backtracking`, `Bit Manipulation`,
-  `Sliding Window`, `Two Pointers`, `1D Dynamic Programming`, …). Discover them by listing CWD
-  dirs, excluding `Progress`, `.obsidian`, `.claude`, `.git`.
-- `Progress/<Pattern>.md` is the **single source of truth** for each problem's SR state.
+- **Patterns** = the top-level folders numbered `01-` … `18-`, where `NN` is the pattern's position
+  on the NeetCode 150 roadmap (`01-Arrays-and-Hashing`, `04-Binary-Search`, `06-Linked-List`, …).
+  Discover them by listing CWD dirs, excluding `00-Progress`, `99-Toolbox`, `.obsidian`, `.claude`,
+  `.git`.
+- `00-Progress/<Pattern>.md` is the **single source of truth** for each problem's SR state.
   `Dashboard.md` is **derived** — recompute it from the pattern files, never hand-maintain.
-- `Progress/Question-Log.md` is **append-only history**, not derived. Every question asked is
+- `00-Progress/Question-Log.md` is **append-only history**, not derived. Every question asked is
   recorded **verbatim** (full stem, all options, which was correct, the user's answer, the
   verdict), plus any code snippet shown. Never rewrite, compress, or prune old entries.
 
@@ -81,16 +86,18 @@ in `{LANG}`. (Numbers, dates, badges, code stay universal.)
 
 ### Phase 1 — Discover & bootstrap
 
-1. List pattern folders at CWD root (exclude `Progress`, `.obsidian`, `.claude`, `.git`).
-2. Read `Progress/Dashboard.md` if it exists.
-3. **First run (no `Progress/`)** → bootstrap:
-   - Create `Progress/` and a `<Pattern>.md` per pattern folder (see Templates).
+1. List pattern folders at CWD root (exclude `00-Progress`, `99-Toolbox`, `.obsidian`, `.claude`,
+   `.git`).
+2. Read `00-Progress/Dashboard.md` if it exists.
+3. **First run (no `00-Progress/`)** → bootstrap:
+   - Create `00-Progress/` and a `<Pattern>.md` per pattern folder (see Templates).
    - **Migrate** existing notes: for each problem note, read its frontmatter; if it still has
      `solved-1st/2nd/3rd`, convert to an SR row (see Migration), then **strip those three fields
      from the note's frontmatter** (leave only `leetcode-id`, `difficulty`, `tags`, `memo`,
      `dg-publish` — no solve date is kept in the note).
    - Recompute `Dashboard.md`.
-   - Confirm `Progress/` is gitignored; if not, tell the user to add `Progress/` to `.gitignore`.
+   - `00-Progress/` is meant to be committed — check that nothing in `.gitignore` excludes it, and
+     never put `dg-publish` in its files.
 4. **Subsequent runs** → also reconcile: any problem note not yet in a pattern file gets added as
    an untracked row (Box 0 / never solved).
 
@@ -113,7 +120,7 @@ User MUST select before proceeding. Never tag an option "(Recommended)".
    - **MCQ quick-check** — 4 questions/round.
    - **Code-reading** — explain a stored snippet.
      Modes may be mixed (e.g. MCQ to triage, then blind-solve the weak ones).
-3. **Read `Progress/Question-Log.md` before crafting ANY question.** Every question already asked
+3. **Read `00-Progress/Question-Log.md` before crafting ANY question.** Every question already asked
    for these problems is recorded there. Never re-ask one verbatim — pick a genuinely new angle,
    input, or snippet. Each log entry ends with a "下次避免重複" list naming the angles already
    burned; honour it.
@@ -145,11 +152,11 @@ Follow `references/quiz-rules.md`. Summary:
 
 For each problem reviewed:
 
-1. Update its row in `Progress/<Pattern>.md`: new `box`, `last-reviewed=today`, `next-due`,
+1. Update its row in `00-Progress/<Pattern>.md`: new `box`, `last-reviewed=today`, `next-due`,
    `reps+1`, `lapses` (+1 on lapse). On a lapse, add/update a `### Notes` entry (the confusion +
    the key point).
-2. Recompute `Progress/Dashboard.md` from all pattern files.
-3. **Append this session's questions to `Progress/Question-Log.md`, verbatim.** One dated section
+2. Recompute `00-Progress/Dashboard.md` from all pattern files.
+3. **Append this session's questions to `00-Progress/Question-Log.md`, verbatim.** One dated section
    per session; per question record the full stem, any code snippet shown, every option with its
    description, which option was correct, the user's answer, and the verdict. Close the section
    with a "下次避免重複" list — for each problem touched, the angle just used and a concrete
@@ -158,26 +165,26 @@ For each problem reviewed:
 
 ## Templates
 
-### `Progress/<Pattern>.md`
+### `00-Progress/<Pattern>.md`
 
 ```markdown
 # {Pattern} — SR Tracker
 
-| Problem                           | ID  | Difficulty | Box | Last Reviewed | Next Due   | Reps | Lapses |
-| --------------------------------- | --- | ---------- | --- | ------------- | ---------- | ---- | ------ |
-| [[Hashing/0001-Two-Sum\|Two Sum]] | 1   | easy       | 3   | 2026-06-14    | 2026-06-21 | 4    | 1      |
+| Problem                   | ID  | Difficulty | Box | Last Reviewed | Next Due   | Reps | Lapses |
+| ------------------------- | --- | ---------- | --- | ------------- | ---------- | ---- | ------ |
+| [[0001-Two-Sum\|Two Sum]] | 1   | easy       | 3   | 2026-06-14    | 2026-06-21 | 4    | 1      |
 
 ### Notes
 
 **Two Sum** — Confusion: 先存再查會用到自己。Key point: 查 `target-nums[i]` 要在存入 `nums[i]` 之前。
 ```
 
-### `Progress/Dashboard.md`
+### `00-Progress/Dashboard.md`
 
 ```markdown
 # LeetCode Review Dashboard
 
-> Spaced-repetition tracker. Source of truth = `Progress/<Pattern>.md` (gitignored).
+> Spaced-repetition tracker. Source of truth = `00-Progress/<Pattern>.md`.
 > Derived view — regenerated by the tutor skill. Do not hand-edit.
 
 ## Due Today (N)
@@ -210,14 +217,15 @@ For each note still carrying `solved-1st/2nd/3rd`:
 - `next-due` = `last-reviewed + interval(box)` (often already past → surfaces as due, which is
   correct — old problems should resurface).
 - Then **remove `solved-1st/2nd/3rd` from the note frontmatter** — no solve date is ever kept in a
-  note; the migrated `last-reviewed` in `Progress/` is the only record.
+  note; the migrated `last-reviewed` in `00-Progress/` is the only record.
 
 ## Important reminders
 
-- ALWAYS read `references/quiz-rules.md` **and `Progress/Question-Log.md`** before crafting any
+- ALWAYS read `references/quiz-rules.md` **and `00-Progress/Question-Log.md`** before crafting any
   question; ALWAYS append the questions asked back to `Question-Log.md` after grading.
-- **NEVER** write SR/review state into a problem note's frontmatter — it goes in `Progress/` only.
-- `Progress/` is gitignored; `Dashboard.md` is derived — recompute, never hand-maintain.
+- **NEVER** write SR/review state into a problem note's frontmatter — it goes in `00-Progress/` only.
+- `00-Progress/` is version-controlled (never `dg-publish`); `Dashboard.md` is derived — recompute,
+  never hand-maintain.
 - Blind-solve is the primary mode; MCQ is a fast supplement, never the whole story.
 - Zero hints in MCQ options; randomize the correct position; no "(Recommended)".
 - Always compute `next-due`/overdue from today's real date.

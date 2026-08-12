@@ -8,8 +8,8 @@ dg-publish: true
 
 ## 瀏覽方式
 
-- **依模式分類**：筆記放在對應的演算法資料夾，資料夾以 NeetCode 150 roadmap 的學習順序加上數字前綴——`01-Arrays-and-Hashing`、`02-Two-Pointers`、`05-Sliding-Window`、`09-Heap`、`10-Backtracking`、`12-1D-Dynamic-Programming`、`17-Bit-Manipulation` …，檔案總管即照學習路徑排序。
-- **互動式索引**：用 Obsidian 開啟 `LeetCode.base`，可依題號 / 難度 / 標籤 / memo 排序、篩選整份題庫。
+- **依模式分類**：筆記放在對應的演算法資料夾，資料夾以 NeetCode 150 roadmap 的學習順序加上數字前綴——`01-Arrays-and-Hashing`、`02-Two-Pointers`、`04-Binary-Search`、`06-Linked-List`、`09-Heap`、`12-1D-Dynamic-Programming`、`17-Bit-Manipulation` …，檔案總管即照學習路徑排序。
+- **前後兩個附錄**：`00-Progress` 是間隔複習的進度儀表板（不發佈）；`99-Toolbox` 收跨題型的參考筆記，如 `STL-Pitfalls`、`Binary-Search-Templates`。
 
 ## 標籤
 
@@ -25,9 +25,9 @@ dg-publish: true
 - **Solution** — 一種以上解法，每段標注 `// Time:` / `// Space:`；關鍵洞見與陷阱以 callout（`> [!tip]`、`> [!warning]`）標示
 - **Related Problems** — 以 `[[題號-標題]]` 連結相關題目
 
-> 解題 / 複習進度**不**寫進筆記 frontmatter（以免每次複習都更動到發佈檔），改由 `/tutor` skill 記錄在 gitignored 的 `Progress/` 目錄。
+> 解題 / 複習進度**不**寫進筆記 frontmatter（以免每次複習都更動到發佈檔），改由 `/tutor` skill 記錄在 `00-Progress/` 目錄。該目錄有進版控，但不帶 `dg-publish`，所以只留在 repo 裡、不會發佈出去。
 
 ## 工具
 
-- **新增題目**：`./newproblem --id <id> --title "<title>" --tags <tag> …`，會依 `problemsets.toml`（Grind 169 / NeetCode 150）自動帶入難度並產生筆記骨架。
+- **新增題目**：`./newproblem --id <id> --title "<title>" --tags <tag> … [--dir <資料夾>]`，會依 `problemsets.toml`（Grind 169 / NeetCode 150）自動帶入難度並產生筆記骨架；`--dir` 可直接產在對應的模式資料夾下。
 - **間隔複習**：`/tutor` skill——挑出到期題複習、盲解評分、MCQ 出題，並可從課程表挑新題。

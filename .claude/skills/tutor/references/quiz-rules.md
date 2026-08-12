@@ -70,10 +70,10 @@ When re-testing a problem that previously lapsed (read its `### Notes`):
 
 For every problem reviewed:
 
-1. Update its row in `Progress/<Pattern>.md`: `box` (pass → `min(box+1,5)`, lapse → `1`),
+1. Update its row in `00-Progress/<Pattern>.md`: `box` (pass → `min(box+1,5)`, lapse → `1`),
    `last-reviewed = today`, `next-due = today + interval(box)`, `reps += 1`, `lapses += lapse`.
 2. On a lapse, add/update a `### Notes` entry: `Confusion:` … `Key point:` …
-3. Recompute `Progress/Dashboard.md` (due-today list + per-pattern avg box + stats).
+3. Recompute `00-Progress/Dashboard.md` (due-today list + per-pattern avg box + stats).
 
 ## Language
 

@@ -4,13 +4,13 @@
 
 ## 倉庫結構
 
-- 筆記**依演算法模式分資料夾**，資料夾名是 `NN-Title-With-Dashes`，`NN` 是該模式在 **NeetCode 150 roadmap 上的位置**（2 位數補零、跳號編，現有：`01-Arrays-and-Hashing`、`02-Two-Pointers`、`05-Sliding-Window`、`09-Heap`、`10-Backtracking`、`12-1D-Dynamic-Programming`、`17-Bit-Manipulation`）。新增模式時用它在 roadmap 的號碼（完整 18 格見下），**不要把現有資料夾重編**。資料夾名用 dash、不用空格或 `&`，因為會發佈成 Digital Garden 的 URL 路徑。
+- 筆記**依演算法模式分資料夾**，資料夾名是 `NN-Title-With-Dashes`，`NN` 是該模式在 **NeetCode 150 roadmap 上的位置**（2 位數補零、跳號編，現有：`01-Arrays-and-Hashing`、`02-Two-Pointers`、`03-Stack`、`04-Binary-Search`、`05-Sliding-Window`、`06-Linked-List`、`09-Heap`、`10-Backtracking`、`12-1D-Dynamic-Programming`、`17-Bit-Manipulation`）。新增模式時用它在 roadmap 的號碼（完整 18 格見下），**不要把現有資料夾重編**。資料夾名用 dash、不用空格或 `&`，因為會發佈成 Digital Garden 的 URL 路徑。
+- **`00-` 與 `99-` 保留給非 roadmap 的資料夾**，前後夾住 01–18 的模式資料夾：`00-Progress`（複習狀態，排最上面因為它是每次的入口）、`99-Toolbox`（跨題型的參考筆記，如 `STL-Pitfalls`、`Binary-Search-Templates`，像附錄放最後；這裡的筆記沒有 `leetcode-id`，是被題目筆記 wikilink 指過去的）。這兩個**不是模式資料夾**，`/tutor` 列模式時會排除它們。
   - roadmap 順序：01 Arrays & Hashing｜02 Two Pointers｜03 Stack｜04 Binary Search｜05 Sliding Window｜06 Linked List｜07 Trees｜08 Tries｜09 Heap / Priority Queue｜10 Backtracking｜11 Graphs｜12 1-D DP｜13 Intervals｜14 Greedy｜15 Advanced Graphs｜16 2-D DP｜17 Bit Manipulation｜18 Math & Geometry。
 - 檔名格式：`NNNN-Title-With-Dashes.md`，`NNNN` 是 **4 位數補零的真實 LeetCode 題號**（由 `newproblem` 的 `sanitize_filename` 產生）。
-- Obsidian `[[wikilink]]` 以 note 檔名（basename）解析、不看路徑，所以搬 / 改資料夾**不會弄壞連結**；`LeetCode.base` 用 `file.basename` 過濾、`newproblem` 一律寫在根目錄——三者都不受資料夾改名影響。
-- `LeetCode.base`：Obsidian Base 互動式索引，依 `file.name` / `difficulty` / `tags` / `memo` 排序篩選。改欄位前先看這支。
+- Obsidian `[[wikilink]]` 以 note 檔名（basename）解析、不看路徑，所以搬 / 改資料夾**不會弄壞連結**；`newproblem` 預設寫在根目錄，可用 `--dir <資料夾>` 直接產在模式資料夾下——兩者都不受資料夾改名影響。
 - `problemsets.toml`：Grind 169 / NeetCode 150 的題名 → 難度對照表，`newproblem` 靠它自動帶難度與題單標籤。
-- `Progress/` 與 `.obsidian/` 在 `.gitignore` 內。解題 / 複習進度**絕不**寫進筆記 frontmatter（避免每次複習都動到發佈檔），由 `/tutor` skill 記在 gitignored 的 `Progress/`。
+- `.gitignore` 只排除 `.obsidian`。**`00-Progress/` 有進版控**（複習狀態要跟著筆記一起留存、換機器也帶得走），但底下的檔案一律不帶 `dg-publish`，所以不會發佈到 Digital Garden。解題 / 複習進度**絕不**寫進筆記 frontmatter（避免每次複習都動到發佈檔），由 `/tutor` skill 記在 `00-Progress/`；複習後那裡的異動要跟著 commit。
 
 ## 筆記格式（改 / 加筆記時必守）
 
