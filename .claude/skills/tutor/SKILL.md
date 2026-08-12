@@ -40,6 +40,7 @@ This vault has an **essential difference** from a concept-knowledge vault:
 ├── newproblem                  ← note generator script
 └── Progress/                   ← SR state — GITIGNORED, never committed
     ├── Dashboard.md            ← derived aggregate: due-today + per-pattern proficiency + stats
+    ├── Question-Log.md         ← append-only verbatim record of every question ever asked
     └── <Pattern>.md            ← per-problem SR rows for that pattern (source of truth)
 ```
 
@@ -48,6 +49,9 @@ This vault has an **essential difference** from a concept-knowledge vault:
   dirs, excluding `Progress`, `.obsidian`, `.claude`, `.git`.
 - `Progress/<Pattern>.md` is the **single source of truth** for each problem's SR state.
   `Dashboard.md` is **derived** — recompute it from the pattern files, never hand-maintain.
+- `Progress/Question-Log.md` is **append-only history**, not derived. Every question asked is
+  recorded **verbatim** (full stem, all options, which was correct, the user's answer, the
+  verdict), plus any code snippet shown. Never rewrite, compress, or prune old entries.
 
 ## Spaced-repetition schedule (Leitner, 5 boxes)
 
@@ -109,7 +113,11 @@ User MUST select before proceeding. Never tag an option "(Recommended)".
    - **MCQ quick-check** — 4 questions/round.
    - **Code-reading** — explain a stored snippet.
      Modes may be mixed (e.g. MCQ to triage, then blind-solve the weak ones).
-3. For drill: also read the pattern file's `### Notes` to target the exact past confusion — re-test
+3. **Read `Progress/Question-Log.md` before crafting ANY question.** Every question already asked
+   for these problems is recorded there. Never re-ask one verbatim — pick a genuinely new angle,
+   input, or snippet. Each log entry ends with a "下次避免重複" list naming the angles already
+   burned; honour it.
+4. For drill: also read the pattern file's `### Notes` to target the exact past confusion — re-test
    the same weakness from a **new angle**, don't repeat the identical question.
 
 ### Phase 4 — Run the test
@@ -141,7 +149,12 @@ For each problem reviewed:
    `reps+1`, `lapses` (+1 on lapse). On a lapse, add/update a `### Notes` entry (the confusion +
    the key point).
 2. Recompute `Progress/Dashboard.md` from all pattern files.
-3. **Never touch the problem note's frontmatter** for review state.
+3. **Append this session's questions to `Progress/Question-Log.md`, verbatim.** One dated section
+   per session; per question record the full stem, any code snippet shown, every option with its
+   description, which option was correct, the user's answer, and the verdict. Close the section
+   with a "下次避免重複" list — for each problem touched, the angle just used and a concrete
+   suggestion for next time. Append only; never edit earlier sections.
+4. **Never touch the problem note's frontmatter** for review state.
 
 ## Templates
 
@@ -201,7 +214,8 @@ For each note still carrying `solved-1st/2nd/3rd`:
 
 ## Important reminders
 
-- ALWAYS read `references/quiz-rules.md` before crafting any question.
+- ALWAYS read `references/quiz-rules.md` **and `Progress/Question-Log.md`** before crafting any
+  question; ALWAYS append the questions asked back to `Question-Log.md` after grading.
 - **NEVER** write SR/review state into a problem note's frontmatter — it goes in `Progress/` only.
 - `Progress/` is gitignored; `Dashboard.md` is derived — recompute, never hand-maintain.
 - Blind-solve is the primary mode; MCQ is a fast supplement, never the whole story.
