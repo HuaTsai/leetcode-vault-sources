@@ -239,6 +239,33 @@ m.contains("nope") = 1             ← 現在它真的存在了
 
 **查詢一律用 `contains` / `find` / `at`，`operator[]` 只留給「我就是要寫入」。**這也是為什麼用了 `operator[]` 的函式沒辦法宣告成 `const`——它是非 const 多載。`at` 有 const 多載，語意也更誠實：「我確定它在，不在就是邏輯錯誤」。
 
+### value 是迭代器時，`operator[]` 的副作用會升級成 segfault
+
+上面那筆憑空多出來的 `{"nope", 0}` 在 value 是 `int` 時只是髒資料。但 value 是**另一個容器的迭代器**時（`unordered_map<int, list<pair<int,int>>::iterator>`，LRU cache 的標準配置）就不只是髒資料：
+
+```cpp
+mp_.erase(key);          // key 從 map 消失
+data_.erase(mp_[key]);   // operator[] 插入一個「值初始化」的 list::iterator
+```
+
+libstdc++ 的預設建構把內部節點指標清成 `nullptr`：
+
+```cpp
+_List_iterator() _GLIBCXX_NOEXCEPT
+: _M_node() { }          // 值初始化 -> nullptr
+```
+
+於是 `list::erase` 對空指標解參考，gdb 報得很直白：
+
+```txt
+Program received signal SIGSEGV, Segmentation fault.
+std::list<...>::erase (__position=non-dereferenceable iterator for std::list)
+    at /usr/include/c++/11/bits/list.tcc:157
+157       iterator __ret = iterator(__position._M_node->_M_next);
+```
+
+這種一定 crash 的反而是好事。**修法是把順序倒過來：先用迭代器，再刪 map**——或者一開始就用 `find` 拿到手，順序問題不會存在。
+
 ### 邊走邊 erase
 
 `erase` 之後迭代器已失效，再 `++it` 是 UB：
@@ -261,6 +288,28 @@ erase_if(m, pred);                    // C++20，一行取代上面整段
 | `unordered_*` | 只有被刪的那一個（但 rehash 會全失效） |
 
 `vector` 另外要注意 `push_back` 觸發擴容時，**所有**迭代器、指標、參考全部失效。
+
+### 迭代器存進別的容器之後，失效就是你的責任
+
+上表的「只有被刪的那一個失效」聽起來很安全，但如果那個迭代器的**另一份拷貝存在別的容器裡**，失效的就是那份拷貝，STL 不會、也不可能幫你更新：
+
+```cpp
+data_.erase(mp_[key]);           // 節點被釋放
+data_.push_back({key, value});   // 新節點建在尾端
+// mp_[key] 還指著剛剛釋放掉的位址
+```
+
+最陰險的是**這段十之八九會跑出正確答案**：`push_back` 的 allocator 通常把剛 `free` 掉的那塊原封不動要回來，失效的迭代器誤打誤撞就指到新節點。g++ 11 一般編譯下實測答案全對，加上 `-fsanitize=address` 讓 quarantine 擋掉記憶體重用才現形：
+
+```txt
+ERROR: AddressSanitizer: heap-use-after-free ... READ of size 4
+freed by thread T0 here:
+  #5 in std::list<...>::_M_erase(...)      <- 就是上面那行 data_.erase
+```
+
+`-D_GLIBCXX_DEBUG` 也會指向 `_Safe_iterator::operator->`，但它印報告的過程本身會踩到那塊記憶體而中途段錯誤，訊息不完整——**這題 ASan 的診斷比較好用**，正好是〈工具〉一節說的兩者互補。
+
+兩條出路：**搬完把存在外面的那份補回去**，或**一開始就別讓它失效**。`list::splice` 是後者——O(1) 把節點接到別處，標準保證迭代器繼續有效，見 [[STL-List-Techniques]]。
 
 ## 五、型別本身在騙你
 
@@ -421,3 +470,5 @@ end
 [[Binary-Search-Templates]] — 決定要不要自己手寫二分之前先看這篇；能用 STL 就別手寫
 [[0153-Find-Minimum-in-Rotated-Sorted-Array]] — 手寫二分的邊界推導範例，對照「外包給 STL」的成本效益
 [[0003-Longest-Substring-Without-Repeating-Characters]] — 第五類兩條陷阱的實戰現場：`vector<bool>` 當查表、`char` 直接當索引
+[[0146-LRU-Cache]] — 第四類兩條陷阱的實戰現場：`operator[]` 生出 nullptr 迭代器、存在 map 裡的迭代器悄悄失效
+[[STL-List-Techniques]] — `list` 的 `splice` 與成員版演算法；第一類「有成員就用成員」在 `list` 上是最極端的版本（泛型版直接編不過）
