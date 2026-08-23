@@ -21,6 +21,7 @@
 | 04-Binary-Search          | 5       | 0.20    | 0      | 🟥    | 0875 通過（二分答案值域）                   |
 | 01-Arrays-and-Hashing     | 9       | 0.00    | 0      | ⬜    | 全部未測試（庫存最多）                      |
 | 02-Two-Pointers           | 4       | 0.00    | 0      | ⬜    | 全部未測試                                  |
+| 07-Trees                  | 4       | 0.00    | 0      | ⬜    | 全部未測試（0098／0230 有自陳待理解點）     |
 | 06-Linked-List            | 1       | 0.00    | 0      | ⬜    | 全部未測試                                  |
 | 09-Heap                   | 1       | 0.00    | 0      | ⬜    | 全部未測試                                  |
 | 10-Backtracking           | 1       | 0.00    | 0      | ⬜    | 全部未測試                                  |
@@ -30,10 +31,11 @@
 
 ## Stats
 
-- **Total tracked**: 33
+- **Total tracked**: 37
 - **Tested at least once**: 4
 - **Due today**: 0 ／ **Due 2026-08-11**: 4（0875、0239、0739、0338）
 - **Weakest pattern**: 03-Stack（唯一有 lapse 的 pattern；0739 需重測 trace 能力）
 - **Strongest pattern**: 17-Bit-Manipulation（avg box 0.33，惟樣本僅 1 題）
 - **Largest untested pool**: 01-Arrays-and-Hashing（9 題全 ⬜）
 - **Bootstrapped**: 2026-08-10
+- **Last updated**: 2026-08-24（新增 07-Trees 追蹤，4 題）
