@@ -1,11 +1,12 @@
 # 03-Stack — SR Tracker
 
-| Problem                                                                    | ID  | Difficulty | Box | Last Reviewed | Next Due | Reps | Lapses |
-| -------------------------------------------------------------------------- | --- | ---------- | --- | ------------- | -------- | ---- | ------ |
-| [[0020-Valid-Parentheses\|Valid Parentheses]]                                | 20  | easy       | 0   | -             | -        | 0    | 0      |
-| [[0150-Evaluate-Reverse-Polish-Notation\|Evaluate Reverse Polish Notation]]  | 150 | medium     | 0   | -             | -        | 0    | 0      |
-| [[0155-Min-Stack\|Min Stack]]                                                | 155 | medium     | 0   | -             | -        | 0    | 0      |
-| [[0739-Daily-Temperatures\|Daily Temperatures]]                              | 739 | medium     | 1   | 2026-08-10    | 2026-08-11 | 1    | 1      |
+| Problem                                                                     | ID  | Difficulty | Box | Last Reviewed | Next Due   | Reps | Lapses |
+| --------------------------------------------------------------------------- | --- | ---------- | --- | ------------- | ---------- | ---- | ------ |
+| [[0020-Valid-Parentheses\|Valid Parentheses]]                               | 20  | easy       | 0   | -             | -          | 0    | 0      |
+| [[0150-Evaluate-Reverse-Polish-Notation\|Evaluate Reverse Polish Notation]] | 150 | medium     | 0   | -             | -          | 0    | 0      |
+| [[0155-Min-Stack\|Min Stack]]                                               | 155 | medium     | 0   | -             | -          | 0    | 0      |
+| [[0739-Daily-Temperatures\|Daily Temperatures]]                             | 739 | medium     | 2   | 2026-08-24    | 2026-08-27 | 2    | 1      |
+| [[0853-Car-Fleet\|Car Fleet]]                                               | 853 | medium     | 0   | -             | -          | 0    | 0      |
 
 ### Notes
 

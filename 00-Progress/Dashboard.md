@@ -9,33 +9,39 @@
 | ------- | ------- | ---------- | ----------- | --- |
 | -       | -       | -          | -           | -   |
 
-> 2026-08-10 診斷測驗後，4 題進入 Box 1，全部 **2026-08-11 到期**。其餘 29 題仍是 Box 0（未測試）。
+### 即將到期
+
+| Date       | Count | Problems                              |
+| ---------- | ----- | ------------------------------------- |
+| 2026-08-25 | 5     | 0011、0021、0125、0128、0238（Box 1） |
+| 2026-08-27 | 4     | 0239、0338、0739、0875（Box 2）       |
 
 ## Proficiency by Pattern
 
-| Pattern                   | Tracked | Avg Box | Lapses | Level | Detail                                      |
-| ------------------------- | ------- | ------- | ------ | ----- | ------------------------------------------- |
-| 17-Bit-Manipulation       | 3       | 0.33    | 0      | 🟥    | 0338 通過（`n & (n-1)`）；0136／0190 未測試 |
-| 03-Stack                  | 4       | 0.25    | 1      | 🟥    | 0739 lapse（單調 stack 逐格 trace）         |
-| 05-Sliding-Window         | 4       | 0.25    | 0      | 🟥    | 0239 通過（deque 支配關係）                 |
-| 04-Binary-Search          | 5       | 0.20    | 0      | 🟥    | 0875 通過（二分答案值域）                   |
-| 01-Arrays-and-Hashing     | 9       | 0.00    | 0      | ⬜    | 全部未測試（庫存最多）                      |
-| 02-Two-Pointers           | 4       | 0.00    | 0      | ⬜    | 全部未測試                                  |
-| 07-Trees                  | 4       | 0.00    | 0      | ⬜    | 全部未測試（0098／0230 有自陳待理解點）     |
-| 06-Linked-List            | 1       | 0.00    | 0      | ⬜    | 全部未測試                                  |
-| 09-Heap                   | 1       | 0.00    | 0      | ⬜    | 全部未測試                                  |
-| 10-Backtracking           | 1       | 0.00    | 0      | ⬜    | 全部未測試                                  |
-| 12-1D-Dynamic-Programming | 1       | 0.00    | 0      | ⬜    | 全部未測試                                  |
+| Pattern                   | Tracked | Avg Box | Lapses | Level | Detail                                                   |
+| ------------------------- | ------- | ------- | ------ | ----- | -------------------------------------------------------- |
+| 17-Bit-Manipulation       | 3       | 0.67    | 0      | 🟥    | 0338 Box 2；0136／0190 未測試                            |
+| 05-Sliding-Window         | 4       | 0.50    | 0      | 🟥    | 0239 Box 2（hard）；0003／0121／0424 未測試              |
+| 02-Two-Pointers           | 4       | 0.50    | 0      | 🟥    | 0011／0125 首測通過；0015／0167 未測試                   |
+| 03-Stack                  | 5       | 0.40    | 1      | 🟥    | 0739 lapse 後回升 Box 2（trace 已過關）                  |
+| 04-Binary-Search          | 6       | 0.33    | 0      | 🟥    | 0875 Box 2；0704 為骨架檔，無法測試                      |
+| 01-Arrays-and-Hashing     | 9       | 0.22    | 1      | 🟥    | 0238 通過、0128 lapse（複雜度分析）；其餘 7 題未測試     |
+| 06-Linked-List            | 6       | 0.17    | 1      | 🟥    | 0021 lapse（空輸入邊界）；新增 0002／0141／0146 未測試   |
+| 07-Trees                  | 4       | 0.00    | 0      | ⬜    | 全部未測試；0098／0230 有自陳待理解點，優先排入          |
+| 09-Heap                   | 1       | 0.00    | 0      | ⬜    | 全部未測試                                               |
+| 10-Backtracking           | 1       | 0.00    | 0      | ⬜    | 全部未測試                                               |
+| 12-1D-Dynamic-Programming | 1       | 0.00    | 0      | ⬜    | 全部未測試                                               |
 
 > Level by avg box: 🟥 <1.5 · 🟨 1.5–2.5 · 🟩 2.5–3.5 · 🟦 >3.5 · ⬜ none
 
 ## Stats
 
-- **Total tracked**: 37
-- **Tested at least once**: 4
-- **Due today**: 0 ／ **Due 2026-08-11**: 4（0875、0239、0739、0338）
-- **Weakest pattern**: 03-Stack（唯一有 lapse 的 pattern；0739 需重測 trace 能力）
-- **Strongest pattern**: 17-Bit-Manipulation（avg box 0.33，惟樣本僅 1 題）
-- **Largest untested pool**: 01-Arrays-and-Hashing（9 題全 ⬜）
-- **Bootstrapped**: 2026-08-10
-- **Last updated**: 2026-08-24（新增 07-Trees 追蹤，4 題）
+- **Total tracked**: 44
+- **Tested at least once**: 9 ／ **未測試**: 35
+- **Due today (2026-08-24)**: 0
+- **Weakest pattern**: 06-Linked-List（6 題只測 1 題，且該題 lapse）
+- **Strongest pattern**: 17-Bit-Manipulation（avg box 0.67）
+- **Open lapses**: 0021（空輸入邊界）、0128（複雜度分析）；0739 已修復
+- **優先排入**: 0098／0230（使用者自陳待理解，見 `07-Trees.md` 的 Notes）
+- **Not testable**: 0704-Binary-Search（骨架檔，`## Solution` 尚未填寫）
+- **Bootstrapped**: 2026-08-10 ／ **Last session**: 2026-08-24
