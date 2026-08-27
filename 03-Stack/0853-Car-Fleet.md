@@ -151,6 +151,7 @@ class Solution {
 
 ## Related Problems
 
+- [[Monotonic-Stack]] — 本題「新元素進場結算舊帳」視角所屬模式的完整模板與變體對照
 - [[1776-Car-Fleet-II]] — 直接的進階版 follow-up，改求「每台車追上前車的時刻」，需用單調堆疊維護碰撞時間。
 - [[0739-Daily-Temperatures]] — 同樣用 stack 維護「尚未被解決」的元素，比較後決定是否彈出／合併。
 - [[0084-Largest-Rectangle-in-Histogram]] — monotonic stack 經典題，練習用堆疊維護遞增／遞減序列。

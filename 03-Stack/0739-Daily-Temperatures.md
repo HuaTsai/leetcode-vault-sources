@@ -93,6 +93,7 @@ class Solution {
 
 ## Related Problems
 
+[[Monotonic-Stack]] — 本題所屬模式的完整模板：四個變體、嚴格性陷阱、貢獻法與構造型的分界
 [[0496-Next-Greater-Element-I]] — next greater element 的原型題，同款單調遞減 stack
 [[0503-Next-Greater-Element-II]] — 環狀陣列變體，繞兩圈掃、index 取模
 [[0901-Online-Stock-Span]] — 鏡像題：往左找連續「不高於」的跨度，單調 stack 的串流版

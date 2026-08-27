@@ -18,7 +18,7 @@ Given an array of integers `heights` representing the histogram's bar height whe
 
 ## Solution
 
-核心觀念：最大矩形的高度一定等於**某根柱子的高度**（不然還能往上長），所以答案 = 對每根柱子 `i` 問「以 `heights[i]` 為高，最寬能延伸到哪」。這個寬度由兩側**第一個比它矮**的柱子夾出來：左界 `L` = 左邊第一個更矮的 index、右界 `R` = 右邊第一個更矮的 index，寬度就是 `R - L - 1`。這正是 next smaller element 模式，用**單調遞增 stack** 一次掃完。
+核心觀念：最大矩形的高度一定等於**某根柱子的高度**（不然還能往上長），所以答案 = 對每根柱子 `i` 問「以 `heights[i]` 為高，最寬能延伸到哪」。這個寬度由兩側**第一個比它矮**的柱子夾出來：左界 `L` = 左邊第一個更矮的 index、右界 `R` = 右邊第一個更矮的 index，寬度就是 `R - L - 1`。這正是 next smaller element 模式，用**單調遞增 stack** 一次掃完（四個變體、嚴格性陷阱與貢獻法整理在 [[Monotonic-Stack]]）。
 
 真正的關鍵不在算式，而在**結算時機**：一根柱子的右界，恰好在它「被彈出」的那一刻才確定——因為能把它彈出的 `heights[i]` 就是右邊第一個更矮的。所以每根柱子只在被 pop 時結算一次，總共 n 次結算，而不是每步重掃整個棧。
 
@@ -117,8 +117,10 @@ class Solution {
 
 ## Related Problems
 
+[[Monotonic-Stack]] — 本題所屬模式的完整模板：四個變體、`>` 與 `>=` 的嚴格性陷阱、貢獻法
 [[0739-Daily-Temperatures]] — 同款單調 stack 的入門型：找右邊第一個更大，結算的是天數差而非面積
 [[0042-Trapping-Rain-Water]] — 單調遞減 stack 的鏡像題，彈出時結算的是凹槽而非矩形
 [[0085-Maximal-Rectangle]] — 把矩陣每一列壓成直方圖高度，逐列直接套用本題，是最直接的升級版
 [[0853-Car-Fleet]] — 同為「新元素進場結算舊帳」的視角，但改成由右往左掃
 [[1793-Maximum-Score-of-a-Good-Subarray]] — 「以某元素為區間最小值能延伸多寬」的同構問題，多一個必須包含 `k` 的限制
+[[0907-Sum-of-Subarray-Minimums]] — 同一組左右界，改用貢獻法數「管轄幾個子陣列」

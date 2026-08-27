@@ -44,4 +44,4 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k) {
 
 ## Related Problems
 
-[[0239-Sliding-Window-Maximum]]
+[[Monotonic-Stack]] — 單調 deque 的近親，攤還論證完全相同；差別在單調棧只從尾端進出，deque 因為左端會滑出視窗而兩端都要彈

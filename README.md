@@ -22,6 +22,7 @@ dg-publish: true
 - [[Sparse-Table-RMQ]] — 靜態陣列的 O(1) 區間查詢，以及為什麼只能用於冪等運算
 - [[Disjoint-Set-Union]] — 並查集與可撤銷版，兩個優化各自的效果實測
 - [[Sqrt-Decomposition-and-Mos]] — 分塊與莫隊，處理線段樹做不到的不可合併查詢
+- [[Monotonic-Stack]] — 兩側第一個更大／更小，四個變體、嚴格性陷阱與貢獻法
 
 **圖論**
 
