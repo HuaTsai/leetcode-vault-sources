@@ -75,7 +75,54 @@ class Solution {
 > 這題跟 0104 不同的地方在於**每層要收值**，而 `n` 正好就是這層的長度——不 reserve 的話 `vals` 得從 0 開始倍增重配。但順序不能反：`while (n--)` 結束時 `n` 已經是 -1，事後補 `reserve` 只會拿到垃圾。收完再 `std::move(vals)` 進 `ans`，省掉一次整層的複製。
 
 > [!note] `reserve` + `move` 不是紙上談兵，量測得出來
-> 2000 節點隨機樹跑 2000 次、用 cachegrind 數指令數：原版（無 reserve、`push_back(vals)`）198.3M，加了 reserve 與 move 後 131.4M，**少掉約 34%**。再進一步把 `queue` 換成 `cur` / `next` 兩個 `vector` 交替 `swap`（層序天然就是「讀當層、寫下層」，不需要 `deque` 的分段配置與 `front()/pop()` 間接定址）可壓到 105.5M，**比原版少 47%**。三者都是 O(n)，差的是常數；面試寫佇列版最穩，vector 雙緩衝是知道有這條路即可。
+> 2000 節點隨機樹跑 2000 次、用 cachegrind 數指令數：原版（無 reserve、`push_back(vals)`）198.3M，加了 reserve 與 move 後 131.4M，**少掉約 34%**。兩者都是 O(n)，差的只是常數——但這個常數是白撿的，因為 `n` 本來就已經在手上。
+
+**變體：`cur` / `next` 兩個 `vector` 交替**
+
+層序的本質是「讀當層、寫下層」，這件事其實不需要佇列：用兩個 `vector` 分別扮演「正在讀的層」與「正在長出來的層」，一輪結束後對調即可。
+
+```cpp
+// Time: O(n)   每個節點被讀取一次、被推進 next 一次
+// Space: O(n)  cur 與 next 合計最多裝下相鄰兩層
+class Solution {
+ public:
+  vector<vector<int>> levelOrder(TreeNode* root) {
+    if (!root) {
+      return {};
+    }
+    vector<vector<int>> ans;
+    vector<TreeNode *> cur{root}, next;
+    while (!cur.empty()) {
+      vector<int> vals;
+      vals.reserve(cur.size());
+      next.clear();
+      for (auto node : cur) {
+        vals.push_back(node->val);
+        if (node->left) {
+          next.push_back(node->left);
+        }
+        if (node->right) {
+          next.push_back(node->right);
+        }
+      }
+      ans.push_back(std::move(vals));
+      cur.swap(next);
+    }
+    return ans;
+  }
+};
+```
+
+> [!tip] 讀寫分離之後，`n` 那顆釘子就不需要了
+> 佇列版之所以非凍結 `n` 不可，根源是**讀和寫共用同一個容器**；這裡當層在 `cur`、下一層在 `next`，層的邊界由 `cur.size()` 天然給定，`for (auto node : cur)` 怎麼寫都不會吃到下一層。等於用「多一個容器」換掉「一個最容易寫錯的地方」，代價是每輪別忘了 `next.clear()`。
+
+> [!note] 為什麼是 `cur.swap(next)` 而不是 `cur = next`
+> `next.clear()` 只把 size 歸零、**容量留著**，配上 O(1) 的 `swap`（只換三根指標），兩塊緩衝區整趟走訪被反覆重用，不必每層重配。寫成 `cur = next;` 也能跑、連配置次數都幾乎一樣（複製指派會重用 `cur` 既有的容量），差別是每層多一次整層指標的複製——同樣條件下量到 110.4M vs 105.5M，約多 5%。而相對佇列優化版的 131.4M，這個變體是 105.5M、**再少 20%**，省下的是 `deque` 的分段配置與 `front()/pop()` 的間接定址。面試時佇列版仍是預設答案（一眼就看得懂、也是所有題解的共同語言），這個變體屬於「知道還有這條路」。
+
+> [!important] 什麼時候該真的換過去——判準是「需不需要層」，不是「想不想快」
+> 把同一組實作搬到真實的圖 BFS 上量，這個常數優勢會消失：200k 節點的隨機稀疏圖上兩者時間差 1%（離散度 ±28%，等於根本量不出來），因為 738 萬次 `dist[v]` 的 cache miss 兩邊一樣多，容器省下的那 4% 指令完全躲在陰影裡；換成 100 萬層、每層 1 個節點的鏈狀圖，`cur` / `next` 反而**慢 37%**——每層的 `clear()` + `swap()` 付了 100 萬次。記憶體峰值它也輸 1.5–2.4x（`vector` 倍增配置、`clear()` 又不縮容，兩個緩衝區都會停在最寬那層的高水位）。**這題之所以贏，是因為 2000 個節點的樹整棵塞得進 32 KB 的 L1，一次 miss 都不用付，容器成本才從雜魚變成主角。** 完整實驗與量測方法見 [[BFS-Container-Benchmark]]。
+>
+> 所以選擇標準是**需不需要「層」這個概念**：要按層輸出或聚合、要免費的層號當距離（不必在佇列裡塞 `pair<node, dist>`）、要對整層排序／去重／平行處理（雙向 BFS 挑較小的一側擴展）——這些場合用它；純粹為了快就別換。另外權重不全是 1 的 BFS 根本套不上：0-1 BFS 要 `push_front` 插隊、Dijkstra 的出隊順序由距離決定、SPFA 會重複入隊，這三者的「下一批」都不等於「下一層」。
 
 ### 方法二：DFS 前序 ＋ depth 當索引 — O(n)／O(h)
 
@@ -125,3 +172,4 @@ class Solution {
 - [[0199-Binary-Tree-Right-Side-View]] — 每層只取最後一個元素，是本題方法一改一行的直接應用
 - [[0637-Average-of-Levels-in-Binary-Tree]] — 每層改成累加求平均，注意用 `double` 或 `long long` 防溢位
 - [[0111-Minimum-Depth-of-Binary-Tree]] — 同樣層序，但碰到第一個葉節點就能提早 return，是 BFS 真正贏遞迴的場合
+- [[BFS-Container-Benchmark]] — 本題那個 `cur` / `next` 變體放到真實圖上還成不成立的完整實測，順便是 callgrind 與記憶體高水位的量測範例
