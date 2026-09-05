@@ -84,3 +84,11 @@ vector<vector<int>> subsets(vector<int> &nums) {
   return ans;
 }
 ```
+
+## Related Problems
+
+- [[0090-Subsets-II]] — 候選含重複值的版本，多了排序＋同層跳過（`i > start`）
+- [[0039-Combination-Sum]] — 同一個骨架加上 target 條件，變成組合型（葉節點才收答案）
+- [[0046-Permutations]] — 對照組：排列要求換序算新解，所以不能有 `start`，改用 `used` 陣列
+- [[0338-Counting-Bits]] — 位元遮罩解法的同源思路，把 `0 ~ 2^n-1` 當成子集編號
+- [[Backtracking-Templates]] — 本題是「模板一 · 子集型」與「模板四 · 選／不選」最乾淨的原型，模板選擇流程見這篇

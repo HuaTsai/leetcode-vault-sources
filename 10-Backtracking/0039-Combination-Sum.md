@@ -201,3 +201,4 @@ class Solution {
 - [[0078-Subsets]] — 方法二那個「選／不選」二元遞迴骨架的原型
 - [[0046-Permutations]] — 對照組：排列要求順序不同也算，所以不能用 `start`，改用 `used` 陣列
 - [[Knapsack-and-Classic-DP]] — 完全背包骨架，以及「最優值／方案數／列舉」三種摺疊方式的分界
+- [[Backtracking-Templates]] — 本題屬「模板二 · 可重複取（傳 `i`）」，回溯家族的模板選擇與去重規則總表都在這篇
