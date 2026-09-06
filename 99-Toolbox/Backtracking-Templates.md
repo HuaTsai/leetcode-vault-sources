@@ -219,6 +219,19 @@ void bt(int i) {
 >
 > 判斷法很簡單：**一個 `bt` 裡出現兩次遞迴呼叫，就不該再有 `for`；有 `for`，迴圈裡就只該有一次遞迴呼叫。**
 
+**變體：候選是固定字元集。**「選／不選」其實是「每一格從一個固定候選集挑一個」的特例——候選集不隨深度改變，所以照樣沒有 `for`。[[0022-Generate-Parentheses]] 是最乾淨的例子，兩個分支從「選／不選 `nums[i]`」換成「這一格填 `(` 還是填 `)`」：
+
+```cpp
+// n 對括號，open／close 是已放的數量
+void bt(int open, int close) {
+  if ((int)cur.size() == 2 * n) { ans.push_back(cur); return; }
+  if (open < n) { cur.push_back('('); bt(open + 1, close); cur.pop_back(); }      // 存貨還夠
+  if (close < open) { cur.push_back(')'); bt(open, close + 1); cur.pop_back(); }  // 不變式允許
+}
+```
+
+真正的差別在**守門條件的來源**：模板四本體的兩個分支無條件成立（選或不選永遠合法，只是收到不同答案），這裡則要靠條件維持「任何前綴都合法」的不變式，少一個條件就會生出非法字串。候選超過兩個時（如 [[0017-Letter-Combinations-of-a-Phone-Number]] 的按鍵字母）會回到 `for`，但枚舉的仍是「這一格填什麼」，不是「下一個拿哪個元素」——`start` 依舊不存在。
+
 ## 重複值去重總表
 
 | 骨架 | 去重條件 | 為什麼 |
@@ -330,7 +343,7 @@ void bt(int r) {
 | 一 · 子集型 | [[0078-Subsets]]、[[0090-Subsets-II]] |
 | 二 · 組合型 | [[0039-Combination-Sum]]、[[0040-Combination-Sum-II]]、[[0077-Combinations]]、[[0216-Combination-Sum-III]] |
 | 三 · 排列型 | [[0046-Permutations]]、[[0047-Permutations-II]] |
-| 四 · 選／不選 | [[0078-Subsets]]、[[0090-Subsets-II]] |
+| 四 · 選／不選 | [[0078-Subsets]]、[[0090-Subsets-II]]、[[0022-Generate-Parentheses]]（固定字元集，分支帶守門條件） |
 | 切割型 | [[0131-Palindrome-Partitioning]]、[[0093-Restore-IP-Addresses]] |
 | 網格型 | [[0079-Word-Search]]、[[0212-Word-Search-II]] |
 | 棋盤型 | [[0051-N-Queens]]、[[0037-Sudoku-Solver]] |
@@ -343,5 +356,6 @@ void bt(int r) {
 [[0040-Combination-Sum-II]] — `i > start` 去重規則講得最完整的一題，附不去重改用 set 過濾的成本實測
 [[0039-Combination-Sum]] — 可重複取（傳 `i`）的原型，也是回溯與完全背包 DP 的分界點
 [[0078-Subsets]] — 最乾淨的子集骨架，無重複值、不必去重
+[[0022-Generate-Parentheses]] — 模板四的固定字元集變體，剪枝條件本身就是合法性的不變式
 [[Knapsack-and-Classic-DP]] — 當題目從「列舉所有組合」改問「有幾種／最優值」，回溯就該換成 DP
 [[Graph-Traversal-and-Connectivity]] — DFS 骨架同源，差別在圖走訪的 `visited` 不撤銷、回溯的一定要撤銷
