@@ -146,7 +146,7 @@ return -1;
 
 **✓ 講意圖（同樣長度，資訊量完全不同）**
 
-> "I keep a **closed interval** `[left, right]` that always contains the answer if it exists. Each round I look at the midpoint — I write it as `left + (right - left) / 2` **to avoid overflow** rather than `(left + right) / 2`. If it's the target I'm done. If it's too small, the answer must be **strictly to the right**, so I move `left` past `mid`; otherwise I move `right` below `mid`. If the interval becomes empty, the target isn't there, so I return minus one."
+> "I keep a **closed interval** `[left, right]` that always contains the answer if it exists. Each round I look at the midpoint — I write it as `left + (right - left) / 2` **to avoid the overflow** you'd get from `(left + right) / 2`. In C++20 there's also **`std::midpoint`**, which expresses the same thing directly — and it's actually stricter, since it stays correct even when `right - left` itself would overflow. If it's the target I'm done. If it's too small, the answer must be **strictly to the right**, so I move `left` past `mid`; otherwise I move `right` below `mid`. If the interval becomes empty, the target isn't there, so I return minus one."
 
 差別在三處，每一處都是面試官在打分的地方：
 
@@ -154,7 +154,20 @@ return -1;
 2. 說出**為什麼這樣寫**（"to avoid overflow"），這是主動送分。
 3. 說出**為什麼可以丟掉一半**（"must be strictly to the right"），證明你不是背模板。
 
-模板本身見 [[Binary-Search-Templates]]。
+> [!tip] 主動提標準庫的對應物，是第 4 個送分點
+> 講完 overflow 再補一句 `std::midpoint`，一次送出三個訊號：知道這個坑、知道標準庫、**知道兩者的差異邊界**。最後一項才是關鍵 —— 只說「有 `std::midpoint` 喔」是背 API，說得出它比手寫版多守住哪個 case 才是真懂。
+>
+> 提了就會被追問，而這三題都是繼續加分的地方：
+>
+> - **「它怎麼取整？」** 往第一個參數的方向，所以 `midpoint(l, r)` 是下取整、`midpoint(r, l)` 是上取整。
+> - **「為什麼標準庫拖到 C++20 才加？」** Joshua Bloch 2006 年的 *"Nearly All Binary Searches and Mergesorts are Broken"* —— JDK 的 `Arrays.binarySearch` 帶著 `(low + high) / 2` 這個 bug 跑了九年才被發現。「連標準庫都寫錯過」比空講 overflow 有說服力得多。
+> - **「包一層不會比較慢嗎？」** 這題最能拉開差距，而且有實測答案：
+>
+>   > "It's genuinely zero-cost. The extra branch `midpoint` needs — to decide which way to round — gets eliminated inside a binary search loop, because the loop condition `l <= r` already proves the direction to the compiler. The generated code is identical except `sar` becomes `shr`."
+>
+> 唯一前提：`std::midpoint` 是 C++20 的 `<numeric>`。**口頭提**永遠安全；但要在對方的線上評測環境**手寫**之前先確認編譯器版本，有些 judge 還卡在 C++17，寫下去直接編譯失敗就得不償失。
+
+模板本身與零成本實測見 [[Binary-Search-Templates]]。
 
 ## 五、面試流程句型
 

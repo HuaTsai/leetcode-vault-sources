@@ -147,6 +147,45 @@ int firstAtLeast(vector<int>& nums, int target) {  // 半開版
 > - **有** → 被迫用閉區間，因為 `r` 必須是合法 index。[[0153-Find-Minimum-in-Rotated-Sorted-Array]] 的標準解要比 `nums[m] > nums[r]`，就屬這類。
 > - **沒有**（只跟外部固定值比）→ 兩種都行，**半開通常更好**：`l == n` 這個狀態免費幫你表達「找不到」，省掉一次特判。
 
+## 中點的寫法：`l + (r - l) / 2` 與 `std::midpoint`
+
+上面所有模板都寫 `l + (r - l) / 2`。C++20 的 `std::midpoint(l, r)`（`<numeric>`）是同一件事的具名版本，兩者可以互換。
+
+> [!tip] 實測等價，而且是真的零成本
+> **語義一致**：`std::midpoint(a, b)` 對整數是「往 `a` 的方向取整」，所以 `l <= r` 時 `midpoint(l, r)` 就是下取整。200 萬組隨機測資（含負數、跨零）比對 `l + (r - l) / 2`，不一致 0 組。
+>
+> **效能一致**：單看函式，`midpoint` 多一組分支和 `imul`（要決定往哪邊取整）；但放進二分迴圈後，編譯器從迴圈條件 `l <= r` 就證明了方向，那組分支被完全消掉：
+>
+> ```txt
+> l + (r - l) / 2         std::midpoint(l, r)
+> mov eax, esi            mov eax, esi
+> sub eax, ecx            sub eax, ecx
+> sar eax        ← 差這   shr eax        ← 差這
+> add eax, ecx            add eax, ecx
+> ```
+>
+> `-O2` 下 cachegrind 實測三種迴圈型態（模板一、模板二下取整、模板二上取整），3.1 億條指令裡差 3 條（程式啟動雜訊），checksum 全部相同。
+
+差異只有一個，而且刷題幾乎踩不到：
+
+> [!warning] `l + (r - l) / 2` 的前提是 `r - l` 自己不溢位
+> 這個寫法閃掉的是 `l + r` 溢位，卻沒有保證 `r - l` 安全。當區間橫跨整個 int 值域：
+>
+> ```txt
+> l = -2000000000, r = 2000000000
+>   std::midpoint(l, r) = 0             正確
+>   l + (r - l) / 2     = -2147483648   錯，且 r - l 已是 signed overflow（UB）
+> ```
+>
+> index 二分（`l >= 0`）和 [[0875-Koko-Eating-Bananas]] 那種正值域二分都不可能觸發，所以本篇模板維持原寫法。只有**在橫跨正負的值域上二分**才有實際差別。
+
+> [!note] 兩個使用限制
+>
+> - **吃不了 iterator**：只支援算術型別和原生指標，`vector<int>::iterator` 直接編譯失敗（`no matching function for call to midpoint`）。`int*`、`size_t`、`long long` 都可以。
+> - **上取整要靠反轉參數**：往第一個參數取整，所以 `midpoint(r, l)` 才是上取整。實測正確、也一樣零成本，但它跟 `midpoint(l, r)` 長得太像，review 時容易看漏 —— **建議上取整仍寫 `l + (r - l + 1) / 2`**，把「+1 是為了上取整」這個意圖留在字面上。
+
+面試時兩種寫法怎麼講、會被追問什麼，見 [[Interview-English-Phrasebook]]。
+
 ## 題目分類
 
 | 模板                       | 題目                                                                                                                                                                                                     |
