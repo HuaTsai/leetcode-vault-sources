@@ -10,6 +10,7 @@
 - 檔名格式：`NNNN-Title-With-Dashes.md`，`NNNN` 是 **4 位數補零的真實 LeetCode 題號**（由 `newproblem` 的 `sanitize_filename` 產生）。
 - Obsidian `[[wikilink]]` 以 note 檔名（basename）解析、不看路徑，所以搬 / 改資料夾**不會弄壞連結**；`newproblem` 預設寫在根目錄，可用 `--dir <資料夾>` 直接產在模式資料夾下——兩者都不受資料夾改名影響。
 - `problemsets.toml`：Grind 169 / NeetCode 150 的題名 → 難度對照表，`newproblem` 靠它自動帶難度與題單標籤。
+- `待理解名單.md`（根目錄）：**使用者說「寫進待理解清單」就是指這個檔**，還沒全面理解、想再花時間啃的東西都記這裡（`00-Progress/` 底下的 `#### 待理解` 小節是 `/tutor` 複習時記自陳用的，不是這個）。每條記「卡在哪」而不只是「要看什麼」，下次回來才知道從哪切入。格式：`## [[題目 wikilink]] — 方法X：一句話標題`，底下固定三個粗體小節 **卡在哪**／**已經釐清的**／**下次做什麼**，條目之間用 `---` 分隔；同一題的不同方法各佔一條，除非它們是同一個洞見的兩種寫法。frontmatter 只有 `dg-publish: false`，不發佈。
 - `.gitignore` 只排除 `.obsidian`。**`00-Progress/` 有進版控**（複習狀態要跟著筆記一起留存、換機器也帶得走），但底下的檔案一律不帶 `dg-publish`，所以不會發佈到 Digital Garden。解題 / 複習進度**絕不**寫進筆記 frontmatter（避免每次複習都動到發佈檔），由 `/tutor` skill 記在 `00-Progress/`；複習後那裡的異動要跟著 commit。
 
 ## 筆記格式（改 / 加筆記時必守）
